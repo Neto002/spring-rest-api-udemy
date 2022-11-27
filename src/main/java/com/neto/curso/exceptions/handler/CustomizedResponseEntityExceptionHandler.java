@@ -1,5 +1,6 @@
 package com.neto.curso.exceptions.handler;
 
+import com.neto.curso.exceptions.DivisionByZeroException;
 import com.neto.curso.exceptions.ExceptionResponse;
 import com.neto.curso.exceptions.UnsupportedMathOperationException;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,7 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
         return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(UnsupportedMathOperationException.class)
+    @ExceptionHandler({UnsupportedMathOperationException.class, DivisionByZeroException.class})
     public final ResponseEntity<ExceptionResponse> handleBadRequestExceptions(Exception exception, WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), exception.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
