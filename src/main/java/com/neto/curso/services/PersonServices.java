@@ -40,9 +40,7 @@ public class PersonServices {
 
         Person entity = DozerMapper.parseObject(person, Person.class);
 
-        PersonVO vo = DozerMapper.parseObject(repository.save(entity), PersonVO.class);
-
-        return vo;
+        return DozerMapper.parseObject(repository.save(entity), PersonVO.class);
     }
 
     public PersonVO update(PersonVO person) {
@@ -55,9 +53,7 @@ public class PersonServices {
         entity.setAddress(person.getAddress());
         entity.setGender(person.getGender());
 
-        PersonVO vo = DozerMapper.parseObject(repository.save(entity), PersonVO.class);
-
-        return vo;
+        return DozerMapper.parseObject(repository.save(entity), PersonVO.class);
     }
 
     public void delete(Long id) {
