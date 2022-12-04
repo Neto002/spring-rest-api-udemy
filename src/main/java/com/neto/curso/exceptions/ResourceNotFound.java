@@ -3,11 +3,11 @@ package com.neto.curso.exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(code = HttpStatus.BAD_REQUEST)
-public class DivisionByZeroException extends RuntimeException {
+@ResponseStatus(code = HttpStatus.NOT_FOUND)
+public class ResourceNotFound extends RuntimeException{
     private static final long serialVersionUID = 1L;
 
-    public DivisionByZeroException(String message) {
+    public ResourceNotFound(String message) {
         super(message);
     }
 }
