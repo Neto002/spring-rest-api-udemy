@@ -1,8 +1,10 @@
 package com.neto.curso.services;
 
 import com.neto.curso.data.vo.v1.PersonVO;
+import com.neto.curso.data.vo.v2.PersonVOV2;
 import com.neto.curso.exceptions.ResourceNotFound;
 import com.neto.curso.mapper.DozerMapper;
+import com.neto.curso.mapper.custom.PersonMapper;
 import com.neto.curso.model.Person;
 import com.neto.curso.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,9 @@ public class PersonServices {
 
     @Autowired
     PersonRepository repository;
+
+    @Autowired
+    PersonMapper mapper;
 
     public List<PersonVO> findAll() {
 
@@ -43,6 +48,15 @@ public class PersonServices {
         PersonVO vo = DozerMapper.parseObject(repository.save(entity), PersonVO.class);
 
         return vo;
+    }
+
+    public PersonVOV2 createV2(PersonVOV2 person) {
+
+        logger.info("Creating a person with V2!");
+
+        Person entity = mapper.convertVoToEntity(person);
+
+        return mapper.convertEntityToVo(repository.save(entity));
     }
 
     public PersonVO update(PersonVO person) {
