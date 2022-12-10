@@ -9,6 +9,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
 
+/**
+ * Classe para configurar outros formatos de requests e responses
+ */
+
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
