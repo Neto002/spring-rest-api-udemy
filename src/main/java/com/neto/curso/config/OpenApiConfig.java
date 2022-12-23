@@ -17,7 +17,11 @@ public class OpenApiConfig {
                         .version("v1")
                         .description("Description")
                         .termsOfService("test")
-                        .license(new License().name("Apache 2.0").url("test")))
-                ;
+                        .license(
+                            new License()
+                                .name("Apache 2.0")
+                                .url("test")
+                        )
+                );
     }
 }
