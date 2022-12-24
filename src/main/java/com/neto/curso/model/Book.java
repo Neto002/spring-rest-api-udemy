@@ -17,7 +17,8 @@ public class Book implements Serializable {
     private Long id;
     @Column(nullable = false, length = 80)
     private String author;
-    @Column(nullable = false)
+    @Column(name = "launch_date", nullable = false)
+    @Temporal(TemporalType.DATE)
     private Date launchDate;
     @Column(nullable = false)
     private Double price;
