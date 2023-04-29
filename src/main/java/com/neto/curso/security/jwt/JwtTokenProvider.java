@@ -1,4 +1,4 @@
-package com.neto.curso.securityJwt;
+package com.neto.curso.security.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
