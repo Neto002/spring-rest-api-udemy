@@ -41,6 +41,7 @@ public class PersonController {
         return service.findAll();
     }
 
+    @CrossOrigin(origins = "http://localhost:8080")
     @Operation(summary = "Finds a person", description = "Finds a Person",
             tags = {"People"},
             responses = {
@@ -60,6 +61,7 @@ public class PersonController {
         return service.findById(id);
     }
 
+    @CrossOrigin(origins = {"http://localhost:8080"})
     @Operation(summary = "Adds a Person", description = "Adds a Person",
             tags = {"People"},
             responses = {
