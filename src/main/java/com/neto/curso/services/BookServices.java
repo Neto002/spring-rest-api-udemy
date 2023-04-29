@@ -3,7 +3,7 @@ package com.neto.curso.services;
 import com.neto.curso.controllers.BookController;
 import com.neto.curso.data.vo.v1.BookVO;
 import com.neto.curso.exceptions.RequiredObjectIsNullException;
-import com.neto.curso.exceptions.ResourceNotFound;
+import com.neto.curso.exceptions.ResourceNotFoundException;
 import com.neto.curso.mapper.DozerMapper;
 import com.neto.curso.model.Book;
 import com.neto.curso.repository.BookRepository;
@@ -33,10 +33,10 @@ public class BookServices {
         return books;
     }
 
-    public BookVO findById(Long id) throws ResourceNotFound {
+    public BookVO findById(Long id) throws ResourceNotFoundException {
         logger.info("Finding a book!");
 
-        Book entity = repository.findById(id).orElseThrow(() -> new ResourceNotFound("No records found for this id!"));
+        Book entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this id!"));
 
         BookVO vo = DozerMapper.parseObject(entity, BookVO.class);
         vo.add(linkTo(methodOn(BookController.class).findById(id)).withSelfRel());
@@ -59,13 +59,13 @@ public class BookServices {
         return vo;
     }
 
-    public BookVO update(BookVO book) throws ResourceNotFound {
+    public BookVO update(BookVO book) throws ResourceNotFoundException {
 
         if (book == null) {
             throw new RequiredObjectIsNullException();
         }
 
-        Book entity = repository.findById(book.getKey()).orElseThrow(() -> new ResourceNotFound("No records found for this id!"));
+        Book entity = repository.findById(book.getKey()).orElseThrow(() -> new ResourceNotFoundException("No records found for this id!"));
 
         logger.info("Updating a book!");
 
@@ -79,10 +79,10 @@ public class BookServices {
         return vo;
     }
 
-    public void delete(Long id) throws ResourceNotFound {
+    public void delete(Long id) throws ResourceNotFoundException {
         logger.info("Deleting a book!");
 
-        Book entity = repository.findById(id).orElseThrow(() -> new ResourceNotFound("No records found for this id!"));
+        Book entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this id!"));
 
         repository.delete(entity);
     }

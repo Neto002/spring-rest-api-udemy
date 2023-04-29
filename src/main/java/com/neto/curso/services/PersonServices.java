@@ -3,7 +3,7 @@ package com.neto.curso.services;
 import com.neto.curso.controllers.PersonController;
 import com.neto.curso.data.vo.v1.PersonVO;
 import com.neto.curso.exceptions.RequiredObjectIsNullException;
-import com.neto.curso.exceptions.ResourceNotFound;
+import com.neto.curso.exceptions.ResourceNotFoundException;
 import com.neto.curso.mapper.DozerMapper;
 import com.neto.curso.model.Person;
 import com.neto.curso.repository.PersonRepository;
@@ -38,7 +38,7 @@ public class PersonServices {
 
         logger.info("Finding a person!");
 
-        Person entity = repository.findById(id).orElseThrow(() -> new ResourceNotFound("No records found for this id!"));
+        Person entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this id!"));
 
         PersonVO vo = DozerMapper.parseObject(entity, PersonVO.class);
         vo.add(linkTo(methodOn(PersonController.class).findById(id)).withSelfRel());
@@ -66,7 +66,7 @@ public class PersonServices {
             throw new RequiredObjectIsNullException();
         }
 
-        Person entity = repository.findById(person.getKey()).orElseThrow(() -> new ResourceNotFound("No records found for this id!"));
+        Person entity = repository.findById(person.getKey()).orElseThrow(() -> new ResourceNotFoundException("No records found for this id!"));
 
         logger.info("Updating a person!");
 
@@ -83,7 +83,7 @@ public class PersonServices {
     public void delete(Long id) {
         logger.info("Deleting a person");
 
-        Person entity = repository.findById(id).orElseThrow(() -> new ResourceNotFound("No records found for this id!"));
+        Person entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this id!"));
 
         repository.delete(entity);
     }
