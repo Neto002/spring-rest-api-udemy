@@ -12,7 +12,7 @@ import java.util.Date;
 
 @JsonPropertyOrder({"id", "author", "launchDate", "price", "title"})
 public class BookVO extends RepresentationModel<BookVO> implements Serializable {
-    @Serial
+
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("id")
@@ -23,9 +23,7 @@ public class BookVO extends RepresentationModel<BookVO> implements Serializable 
     private Double price;
     private String title;
 
-    public BookVO() {
-
-    }
+    public BookVO() {}
 
     public Long getKey() {
         return key;
@@ -68,28 +66,51 @@ public class BookVO extends RepresentationModel<BookVO> implements Serializable 
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-
-        BookVO bookVO = (BookVO) o;
-
-        if (!key.equals(bookVO.key)) return false;
-        if (!author.equals(bookVO.author)) return false;
-        if (!launchDate.equals(bookVO.launchDate)) return false;
-        if (!price.equals(bookVO.price)) return false;
-        return title.equals(bookVO.title);
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + ((author == null) ? 0 : author.hashCode());
+        result = prime * result + ((key == null) ? 0 : key.hashCode());
+        result = prime * result + ((launchDate == null) ? 0 : launchDate.hashCode());
+        result = prime * result + ((price == null) ? 0 : price.hashCode());
+        result = prime * result + ((title == null) ? 0 : title.hashCode());
+        return result;
     }
 
     @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + key.hashCode();
-        result = 31 * result + author.hashCode();
-        result = 31 * result + launchDate.hashCode();
-        result = 31 * result + price.hashCode();
-        result = 31 * result + title.hashCode();
-        return result;
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        BookVO other = (BookVO) obj;
+        if (author == null) {
+            if (other.author != null)
+                return false;
+        } else if (!author.equals(other.author))
+            return false;
+        if (key == null) {
+            if (other.key != null)
+                return false;
+        } else if (!key.equals(other.key))
+            return false;
+        if (launchDate == null) {
+            if (other.launchDate != null)
+                return false;
+        } else if (!launchDate.equals(other.launchDate))
+            return false;
+        if (price == null) {
+            if (other.price != null)
+                return false;
+        } else if (!price.equals(other.price))
+            return false;
+        if (title == null) {
+            if (other.title != null)
+                return false;
+        } else if (!title.equals(other.title))
+            return false;
+        return true;
     }
 }
