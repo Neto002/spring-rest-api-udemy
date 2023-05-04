@@ -95,6 +95,7 @@ public class PersonControllerCorsTest extends AbstractIntegrationTest {
         assertNotNull(createdPerson.getLastName());
         assertNotNull(createdPerson.getAddress());
         assertNotNull(createdPerson.getGender());
+        assertTrue(createdPerson.getEnabled());
 
         assertTrue(createdPerson.getId() > 0);
 
@@ -150,6 +151,7 @@ public class PersonControllerCorsTest extends AbstractIntegrationTest {
         assertNotNull(persistedPerson.getLastName());
         assertNotNull(persistedPerson.getAddress());
         assertNotNull(persistedPerson.getGender());
+        assertTrue(persistedPerson.getEnabled());
 
         assertTrue(persistedPerson.getId() > 0);
 
@@ -185,6 +187,7 @@ public class PersonControllerCorsTest extends AbstractIntegrationTest {
         person.setLastName("Stallman");
         person.setAddress("New York City, New York, US");
         person.setGender("Male");
+        person.setEnabled(true);
     }
 
 }

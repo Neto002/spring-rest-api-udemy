@@ -111,6 +111,7 @@ public class PersonControllerYmlTest extends AbstractIntegrationTest {
         assertNotNull(createdPerson.getLastName());
         assertNotNull(createdPerson.getAddress());
         assertNotNull(createdPerson.getGender());
+        assertTrue(createdPerson.getEnabled());
 
         assertTrue(createdPerson.getId() > 0);
 
@@ -151,6 +152,7 @@ public class PersonControllerYmlTest extends AbstractIntegrationTest {
         assertNotNull(createdPerson.getLastName());
         assertNotNull(createdPerson.getAddress());
         assertNotNull(createdPerson.getGender());
+        assertTrue(createdPerson.getEnabled());
 
         assertEquals(person.getId(), createdPerson.getId());
         assertEquals("Richard", createdPerson.getFirstName());
@@ -161,6 +163,45 @@ public class PersonControllerYmlTest extends AbstractIntegrationTest {
 
     @Test
     @Order(3)
+    public void testDisableById() throws JsonProcessingException {
+        mockPerson();
+
+        PersonVO persistedPerson = given().spec(specification)
+                .config(
+                        RestAssuredConfig
+                                .config()
+                                .encoderConfig(EncoderConfig.encoderConfig()
+                                        .encodeContentTypeAs(TestConfigs.CONTENT_TYPE_YML, ContentType.TEXT))
+                )
+                .contentType(TestConfigs.CONTENT_TYPE_YML)
+                .accept(TestConfigs.CONTENT_TYPE_YML)
+                .pathParam("id", person.getId())
+                .when()
+                .patch("{id}")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(PersonVO.class, objectMapper);
+
+        person = persistedPerson;
+
+        assertNotNull(persistedPerson.getId());
+        assertNotNull(persistedPerson.getFirstName());
+        assertNotNull(persistedPerson.getLastName());
+        assertNotNull(persistedPerson.getAddress());
+        assertNotNull(persistedPerson.getGender());
+        assertFalse(persistedPerson.getEnabled());
+
+        assertEquals(person.getId(), persistedPerson.getId());
+        assertEquals("Richard", persistedPerson.getFirstName());
+        assertEquals("Nome atualizado", persistedPerson.getLastName());
+        assertEquals("New York City, New York, US", persistedPerson.getAddress());
+        assertEquals("Male", persistedPerson.getGender());
+    }
+
+    @Test
+    @Order(4)
     public void testFindById() throws JsonProcessingException {
         mockPerson();
 
@@ -189,6 +230,7 @@ public class PersonControllerYmlTest extends AbstractIntegrationTest {
         assertNotNull(persistedPerson.getLastName());
         assertNotNull(persistedPerson.getAddress());
         assertNotNull(persistedPerson.getGender());
+        assertFalse(persistedPerson.getEnabled());
 
         assertEquals(person.getId(), persistedPerson.getId());
         assertEquals("Richard", persistedPerson.getFirstName());
@@ -198,7 +240,7 @@ public class PersonControllerYmlTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @Order(4)
+    @Order(5)
     public void testDelete() throws JsonProcessingException {
 
         given().spec(specification)
@@ -218,7 +260,7 @@ public class PersonControllerYmlTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @Order(5)
+    @Order(6)
     public void testFindAll() throws JsonProcessingException {
 
         PersonVO[] content = given().spec(specification)
@@ -247,6 +289,7 @@ public class PersonControllerYmlTest extends AbstractIntegrationTest {
         assertNotNull(foundPersonOne.getLastName());
         assertNotNull(foundPersonOne.getAddress());
         assertNotNull(foundPersonOne.getGender());
+        assertTrue(foundPersonOne.getEnabled());
 
         assertEquals(1, foundPersonOne.getId());
 
@@ -262,6 +305,7 @@ public class PersonControllerYmlTest extends AbstractIntegrationTest {
         assertNotNull(foundPersonSix.getLastName());
         assertNotNull(foundPersonSix.getAddress());
         assertNotNull(foundPersonSix.getGender());
+        assertTrue(foundPersonSix.getEnabled());
 
         assertEquals(9, foundPersonSix.getId());
 
@@ -272,7 +316,7 @@ public class PersonControllerYmlTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @Order(5)
+    @Order(7)
     public void testFindAllWithoutToken() throws JsonProcessingException {
 
         RequestSpecification specificationWithoutToken = new RequestSpecBuilder()
@@ -301,6 +345,7 @@ public class PersonControllerYmlTest extends AbstractIntegrationTest {
         person.setLastName("Stallman");
         person.setAddress("New York City, New York, US");
         person.setGender("Male");
+        person.setEnabled(true);
     }
 
 }
