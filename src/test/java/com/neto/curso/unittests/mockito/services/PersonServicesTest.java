@@ -38,46 +38,6 @@ public class PersonServicesTest {
         input = new MockPerson();
         MockitoAnnotations.openMocks(this);
     }
-    @Test
-    void testFindAll() {
-        List<Person> entities = input.mockEntityList();
-
-        when(repository.findAll()).thenReturn(entities);
-
-        List<PersonVO> people = service.findAll();
-        assertNotNull(people);
-        assertEquals(14, people.size());
-
-        PersonVO personOne = people.get(1);
-
-        assertNotNull(personOne.getKey());
-        assertNotNull(personOne.getLinks());
-        assertTrue(personOne.toString().contains("links: [</api/person/v1/1>;rel=\"self\"]"));
-        assertEquals("Address Test1", personOne.getAddress());
-        assertEquals("First Name Test1", personOne.getFirstName());
-        assertEquals("Female", personOne.getGender());
-        assertEquals("Last Name Test1", personOne.getLastName());
-
-        PersonVO personFour = people.get(4);
-
-        assertNotNull(personFour.getKey());
-        assertNotNull(personFour.getLinks());
-        assertTrue(personFour.toString().contains("links: [</api/person/v1/4>;rel=\"self\"]"));
-        assertEquals("Address Test4", personFour.getAddress());
-        assertEquals("First Name Test4", personFour.getFirstName());
-        assertEquals("Male", personFour.getGender());
-        assertEquals("Last Name Test4", personFour.getLastName());
-
-        PersonVO personSeven = people.get(7);
-
-        assertNotNull(personSeven.getKey());
-        assertNotNull(personSeven.getLinks());
-        assertTrue(personSeven.toString().contains("links: [</api/person/v1/7>;rel=\"self\"]"));
-        assertEquals("Address Test7", personSeven.getAddress());
-        assertEquals("First Name Test7", personSeven.getFirstName());
-        assertEquals("Female", personSeven.getGender());
-        assertEquals("Last Name Test7", personSeven.getLastName());
-    }
 
     @Test
     void testFindById() {

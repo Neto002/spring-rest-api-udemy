@@ -9,6 +9,8 @@ import com.neto.curso.integrationtests.testcontainers.AbstractIntegrationTest;
 import com.neto.curso.integrationtests.vo.AccountCredentialsVO;
 import com.neto.curso.integrationtests.vo.PersonVO;
 import com.neto.curso.integrationtests.vo.TokenVO;
+import com.neto.curso.integrationtests.vo.pagedmodel.PagedModelPerson;
+import com.neto.curso.integrationtests.vo.wrapper.WrapperPersonVO;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.config.EncoderConfig;
 import io.restassured.config.RestAssuredConfig;
@@ -263,7 +265,7 @@ public class PersonControllerYmlTest extends AbstractIntegrationTest {
     @Order(6)
     public void testFindAll() throws JsonProcessingException {
 
-        PersonVO[] content = given().spec(specification)
+        PagedModelPerson content = given().spec(specification)
                 .config(
                     RestAssuredConfig
                         .config()
@@ -272,15 +274,74 @@ public class PersonControllerYmlTest extends AbstractIntegrationTest {
                 )
                 .contentType(TestConfigs.CONTENT_TYPE_YML)
                 .accept(TestConfigs.CONTENT_TYPE_YML)
+                .queryParams("page", 3, "size", 10, "direction", "asc")
                 .when()
                 .get()
                 .then()
                 .statusCode(200)
                 .extract()
                 .body()
-                .as(PersonVO[].class, objectMapper);
+                .as(PagedModelPerson.class, objectMapper);
 
-        List<PersonVO> people = Arrays.asList(content);
+        List<PersonVO> people = content.getContent();
+
+        PersonVO foundPersonOne = people.get(0);
+
+        assertNotNull(foundPersonOne.getId());
+        assertNotNull(foundPersonOne.getFirstName());
+        assertNotNull(foundPersonOne.getLastName());
+        assertNotNull(foundPersonOne.getAddress());
+        assertNotNull(foundPersonOne.getGender());
+        assertTrue(foundPersonOne.getEnabled());
+
+        assertEquals(677, foundPersonOne.getId());
+
+        assertEquals("Alic", foundPersonOne.getFirstName());
+        assertEquals("Terbrug", foundPersonOne.getLastName());
+        assertEquals("3 Eagle Crest Court", foundPersonOne.getAddress());
+        assertEquals("Male", foundPersonOne.getGender());
+
+        PersonVO foundPersonSix = people.get(5);
+
+        assertNotNull(foundPersonSix.getId());
+        assertNotNull(foundPersonSix.getFirstName());
+        assertNotNull(foundPersonSix.getLastName());
+        assertNotNull(foundPersonSix.getAddress());
+        assertNotNull(foundPersonSix.getGender());
+        assertTrue(foundPersonSix.getEnabled());
+
+        assertEquals(911, foundPersonSix.getId());
+
+        assertEquals("Allegra", foundPersonSix.getFirstName());
+        assertEquals("Dome", foundPersonSix.getLastName());
+        assertEquals("57 Roxbury Pass", foundPersonSix.getAddress());
+        assertEquals("Female", foundPersonSix.getGender());
+    }
+
+    @Test
+    @Order(7)
+    public void testFindPeopleByFirstName() throws JsonProcessingException {
+
+        PagedModelPerson content = given().spec(specification)
+                .config(
+                        RestAssuredConfig
+                                .config()
+                                .encoderConfig(EncoderConfig.encoderConfig()
+                                        .encodeContentTypeAs(TestConfigs.CONTENT_TYPE_YML, ContentType.TEXT))
+                )
+                .contentType(TestConfigs.CONTENT_TYPE_YML)
+                .accept(TestConfigs.CONTENT_TYPE_YML)
+                .pathParam("firstName", "ayr")
+                .queryParams("page", 0, "size", 10, "direction", "asc")
+                .when()
+                .get("/findPeopleByFirstName/{firstName}")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(PagedModelPerson.class, objectMapper);
+
+        List<PersonVO> people = content.getContent();
 
         PersonVO foundPersonOne = people.get(0);
 
@@ -297,26 +358,10 @@ public class PersonControllerYmlTest extends AbstractIntegrationTest {
         assertEquals("Senna", foundPersonOne.getLastName());
         assertEquals("São Paulo", foundPersonOne.getAddress());
         assertEquals("Male", foundPersonOne.getGender());
-
-        PersonVO foundPersonSix = people.get(5);
-
-        assertNotNull(foundPersonSix.getId());
-        assertNotNull(foundPersonSix.getFirstName());
-        assertNotNull(foundPersonSix.getLastName());
-        assertNotNull(foundPersonSix.getAddress());
-        assertNotNull(foundPersonSix.getGender());
-        assertTrue(foundPersonSix.getEnabled());
-
-        assertEquals(9, foundPersonSix.getId());
-
-        assertEquals("Nelson", foundPersonSix.getFirstName());
-        assertEquals("Mvezo", foundPersonSix.getLastName());
-        assertEquals("Mvezo – South Africa", foundPersonSix.getAddress());
-        assertEquals("Male", foundPersonSix.getGender());
     }
 
     @Test
-    @Order(7)
+    @Order(8)
     public void testFindAllWithoutToken() throws JsonProcessingException {
 
         RequestSpecification specificationWithoutToken = new RequestSpecBuilder()
@@ -338,6 +383,59 @@ public class PersonControllerYmlTest extends AbstractIntegrationTest {
                 .get()
                 .then()
                 .statusCode(403);
+    }
+
+    @Test
+    @Order(9)
+    public void testHATEOAS() throws JsonProcessingException {
+
+        String content = given().spec(specification)
+                .config(
+                        RestAssuredConfig
+                                .config()
+                                .encoderConfig(EncoderConfig.encoderConfig()
+                                        .encodeContentTypeAs(TestConfigs.CONTENT_TYPE_YML, ContentType.TEXT))
+                )
+                .contentType(TestConfigs.CONTENT_TYPE_YML)
+                .accept(TestConfigs.CONTENT_TYPE_YML)
+                .queryParams("page", 3, "size", 10, "direction", "asc")
+                .when()
+                .get()
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .asString();
+
+        assertTrue(content.contains("links:\n" +
+                "  - rel: \"self\"\n" +
+                "    href: \"http://localhost:8888/api/person/v1/677\""));
+        assertTrue(content.contains("links:\n" +
+                "  - rel: \"self\"\n" +
+                "    href: \"http://localhost:8888/api/person/v1/409\""));
+        assertTrue(content.contains("links:\n" +
+                "  - rel: \"self\"\n" +
+                "    href: \"http://localhost:8888/api/person/v1/714\""));
+        assertTrue(content.contains("links:\n" +
+                "  - rel: \"self\"\n" +
+                "    href: \"http://localhost:8888/api/person/v1/911\""));
+
+        assertTrue(content.contains("page:\n" +
+                "  size: 10\n" +
+                "  totalElements: 1008\n" +
+                "  totalPages: 101\n" +
+                "  number: 3"));
+
+        assertTrue(content.contains("- rel: \"first\"\n" +
+                "  href: \"http://localhost:8888/api/person/v1?direction=asc&page=0&size=10&sort=firstName,asc\""));
+        assertTrue(content.contains("- rel: \"prev\"\n" +
+                "  href: \"http://localhost:8888/api/person/v1?direction=asc&page=2&size=10&sort=firstName,asc\""));
+        assertTrue(content.contains("- rel: \"self\"\n" +
+                "  href: \"http://localhost:8888/api/person/v1?page=3&size=10&direction=asc\""));
+        assertTrue(content.contains("- rel: \"next\"\n" +
+                "  href: \"http://localhost:8888/api/person/v1?direction=asc&page=4&size=10&sort=firstName,asc\""));
+        assertTrue(content.contains("- rel: \"last\"\n" +
+                "  href: \"http://localhost:8888/api/person/v1?direction=asc&page=100&size=10&sort=firstName,asc\""));
     }
 
     private void mockPerson() {
