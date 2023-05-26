@@ -10,18 +10,19 @@ import org.springframework.context.annotation.Configuration;
 public class OpenApiConfig {
 
     @Bean
-    public OpenAPI customOpenAPI() {
+    OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Rest API Java Neto")
+                        .title("RESTful API with Java 19 and Spring Boot 3.0.1")
                         .version("v1")
-                        .description("Description")
-                        .termsOfService("test")
+                        .description("Some description about your API")
+                        .termsOfService("https://pub.erudio.com.br/meus-cursos")
                         .license(
-                            new License()
-                                .name("Apache 2.0")
-                                .url("test")
+                                new License()
+                                        .name("Apache 2.0")
+                                        .url("https://pub.erudio.com.br/meus-cursos")
                         )
                 );
     }
+
 }

@@ -1,0 +1,10 @@
+DateTime.GetCurrentDateTime.Local DateTimeFormat: DateTime.DateTimeFormat.DateOnly CurrentDateTime=> DataAtual
+Text.CropText.CropTextBeforeFlag Text: DataAtual ToFlag: $''' 00:''' IgnoreCase: False CroppedText=> DataAtual IsFlagFound=> IsFlagFound3
+Text.Replace Text: DataAtual TextToFind: $'''/''' IsRegEx: False IgnoreCase: False ReplaceWith: $'''-''' ActivateEscapeSequences: False Result=> DataAtual
+DateTime.GetCurrentDateTime.Local DateTimeFormat: DateTime.DateTimeFormat.DateAndTime CurrentDateTime=> DataTerminoProcesso
+File.WriteText File: $'''%PathPadrao%\\log\\%DataAtual%.log''' TextToWrite: $'''%DataTerminoProcesso% - %TipoLog% - %Origem% - %Mensagem%''' AppendNewLine: True IfFileExists: File.IfFileExists.Append Encoding: File.FileEncoding.UTF8
+IF TipoLog = $'''ERROR''' THEN
+    File.WriteText File: $'''%PathPadrao%/ERROS_%DataAtual%.csv''' TextToWrite: $'''%DataTerminoProcesso%;%Origem%;%Mensagem%''' AppendNewLine: True IfFileExists: File.IfFileExists.Append Encoding: File.FileEncoding.Unicode
+    @@flowname: 'BATLER - COMUNICAÇÃO DE TABELA'
+    External.RunFlow FlowId: 'b70d65ae-a155-4983-866b-799e771a3007' @bot: NomeBot @complemento: Origem @idpasta: IdPasta @idprocesso: IdProcessoAtual @maquina: NomeMaquina @status: Status
+END

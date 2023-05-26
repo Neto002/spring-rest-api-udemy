@@ -8,10 +8,11 @@ import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Objects;
 
-@JsonPropertyOrder({"id", "firstName", "lastName", "address", "gender"})
+@JsonPropertyOrder({"id", "firstName", "lastName", "address", "gender", "enabled"})
 public class PersonVO extends RepresentationModel<PersonVO> implements Serializable {
-    @Serial
+
     private static final long serialVersionUID = 1L;
 
     @JsonProperty("id")
@@ -21,9 +22,9 @@ public class PersonVO extends RepresentationModel<PersonVO> implements Serializa
     private String lastName;
     private String address;
     private String gender;
+    private Boolean enabled;
 
-    public PersonVO() {
-    }
+    public PersonVO() {}
 
     public Long getKey() {
         return key;
@@ -65,27 +66,25 @@ public class PersonVO extends RepresentationModel<PersonVO> implements Serializa
         this.gender = gender;
     }
 
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
+        if (!super.equals(o)) return false;
         PersonVO personVO = (PersonVO) o;
-
-        if (!key.equals(personVO.key)) return false;
-        if (!firstName.equals(personVO.firstName)) return false;
-        if (!lastName.equals(personVO.lastName)) return false;
-        if (!address.equals(personVO.address)) return false;
-        return gender.equals(personVO.gender);
+        return Objects.equals(key, personVO.key) && Objects.equals(firstName, personVO.firstName) && Objects.equals(lastName, personVO.lastName) && Objects.equals(address, personVO.address) && Objects.equals(gender, personVO.gender) && Objects.equals(enabled, personVO.enabled);
     }
 
     @Override
     public int hashCode() {
-        int result = key.hashCode();
-        result = 31 * result + firstName.hashCode();
-        result = 31 * result + lastName.hashCode();
-        result = 31 * result + address.hashCode();
-        result = 31 * result + gender.hashCode();
-        return result;
+        return Objects.hash(super.hashCode(), key, firstName, lastName, address, gender, enabled);
     }
 }
