@@ -37,5 +37,5 @@ jobs:
       run: |
         docker tag ${{ secrets.DOCKER_USERNAME }}/spring-rest-api-udemy:latest ${{ secrets.DOCKER_USERNAME }}/spring-rest-api-udemy:${{ github.run_id }}
         
-        git push ${{ secrets.DOCKER_USERNAME }}/spring-rest-api-udemy:latest
-        git push ${{ secrets.DOCKER_USERNAME }}/spring-rest-api-udemy:${{ github.run_id }}
+        docker push ${{ secrets.DOCKER_USERNAME }}/spring-rest-api-udemy:${{ github.run_id }}
+        docker push ${{ secrets.DOCKER_USERNAME }}/spring-rest-api-udemy:latest
