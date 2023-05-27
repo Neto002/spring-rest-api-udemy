@@ -1,0 +1,17 @@
+{
+  "groups": [
+    {
+      "name": "file",
+      "type": "com.neto.curso.config.FileStorageConfig",
+      "sourceType": "com.neto.curso.config.FileStorageConfig"
+    }
+  ],
+  "properties": [
+    {
+      "name": "file.upload-dir",
+      "type": "java.lang.String",
+      "sourceType": "com.neto.curso.config.FileStorageConfig"
+    }
+  ],
+  "hints": []
+}
